@@ -5,7 +5,7 @@ import { Container, Table, Icon, SemanticICONS } from "semantic-ui-react";
 import { apiBaseUrl } from "../constants";
 
 import { Patient, Gender } from "../types";
-import { useStateValue } from "../state";
+import { useStateValue, setPatientDetails } from "../state";
 
 const genderIcon: Record<Gender, SemanticICONS> = {
     [Gender.Male]: 'mars',
@@ -24,7 +24,7 @@ export const PatientDetailsPage = () => {
         const { data: patientDetailsFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        dispatch({ type: "SET_PATIENT_DETAILS", payload: patientDetailsFromApi });
+        dispatch(setPatientDetails(patientDetailsFromApi));
       } catch (e) {
         console.error(e);
       }
