@@ -1,13 +1,34 @@
 import React from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 import { Container, Table, Button } from "semantic-ui-react";
+import { apiBaseUrl } from "../constants";
 
-import { Patient, MatchIdParams } from "../types";
+import { Patient } from "../types";
 import { useStateValue } from "../state";
 
-function PatientDetailsPage({match}: RouteComponentProps<MatchIdParams>) {
-  const [{ patients }] = useStateValue();
-  const patient:Patient | undefined = patients[match.params.id];
+const PatientDetailsPage: React.FC = () => {
+
+  const { id } = useParams<{ id: string }>();
+
+  const [{ patient }, dispatch] = useStateValue();
+  
+  React.useEffect(() => {
+
+    const fetchPatientDetails = async () => {
+      try {
+        const { data: patientDetailsFromApi } = await axios.get<Patient>(
+          `${apiBaseUrl}/patients/${id}`
+        );
+        dispatch({ type: "SET_PATIENT_DETAILS", payload: patientDetailsFromApi });
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    if (!patient || patient?.id !== id) {
+      fetchPatientDetails();
+    }
+  }, [patient, id, dispatch]);
 
   return (
     <div className="App">
@@ -18,15 +39,15 @@ function PatientDetailsPage({match}: RouteComponentProps<MatchIdParams>) {
         <Table.Body>
             <Table.Row>
               <Table.Cell>Name</Table.Cell>
-              <Table.Cell>{patient.name}</Table.Cell>
+              <Table.Cell>{patient ? patient.name : ""}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Gender</Table.Cell>
-              <Table.Cell>{patient.gender}</Table.Cell>
+              <Table.Cell>{patient ? patient.gender : ""}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Occupation</Table.Cell>
-              <Table.Cell>{patient.occupation}</Table.Cell>
+              <Table.Cell>{patient ? patient.occupation : ""}</Table.Cell>
             </Table.Row>
         </Table.Body>
       </Table>

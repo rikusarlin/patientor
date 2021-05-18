@@ -38,10 +38,12 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Switch>
+            <Route path="/patients/:id">
+              <PatientDetailsPage />
+            </Route>
             <Route path="/" exact>
               <PatientListPage />
             </Route>
-            <Route path="/patient/:id" component={PatientDetailsPage}/>
           </Switch>
         </Container>
       </Router>
