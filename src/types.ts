@@ -1,5 +1,3 @@
-import { RouteComponentProps } from "react-router-dom";
-
 export interface Diagnosis {
   code: string;
   name: string;
@@ -20,12 +18,3 @@ export interface Patient {
   ssn?: string;
   dateOfBirth?: string;
 }
-
-export interface MatchIdParams {
-  id: string;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MatchIdProps extends RouteComponentProps<MatchIdParams> {
-}
-

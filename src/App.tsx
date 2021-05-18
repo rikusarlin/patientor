@@ -8,7 +8,7 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
-import PatientDetailsPage from "./PatientListPage";
+import PatientDetailsPage from "./PatientDetailsPage";
 
 const App = () => {
   const [, dispatch] = useStateValue();
@@ -26,6 +26,7 @@ const App = () => {
       }
     };
     void fetchPatientList();
+    console.log("App useEffect");
   }, [dispatch]);
 
   return (
@@ -38,12 +39,8 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Switch>
-            <Route path="/patients/:id">
-              <PatientDetailsPage />
-            </Route>
-            <Route path="/" exact>
-              <PatientListPage />
-            </Route>
+            <Route path="/patients/:id" render={() => <PatientDetailsPage/>} />
+            <Route path="/" exact render={() => <PatientListPage/>} />
           </Switch>
         </Container>
       </Router>
