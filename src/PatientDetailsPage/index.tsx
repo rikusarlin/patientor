@@ -4,8 +4,10 @@ import { useParams } from "react-router-dom";
 import { Container, Table, Icon, SemanticICONS } from "semantic-ui-react";
 import { apiBaseUrl } from "../constants";
 
-import { Patient, Gender } from "../types";
+import { Patient, Gender, Entry } from "../types";
 import { useStateValue, setPatientDetails } from "../state";
+
+import EntryComp from "../components/EntryComp";
 
 const genderIcon: Record<Gender, SemanticICONS> = {
     [Gender.Male]: 'mars',
@@ -32,12 +34,12 @@ export const PatientDetailsPage = () => {
     if (!patient || patient?.id !== id) {
       void fetchPatientDetails();
     }
-    console.log("PatientDetailsPage useEffect");
   }, [patient, id, dispatch]);
 
   let iconType:Gender;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  patient ? iconType=patient.gender : iconType=Gender.Other;
+  patient? iconType=patient.gender : iconType=Gender.Other;
+  const entries:Entry[] = patient ? (patient.entries ? patient.entries: []) : [];
   return (
     <div className="App">
       <Container textAlign="center">
@@ -60,6 +62,10 @@ export const PatientDetailsPage = () => {
               <Table.Cell>Date of birth</Table.Cell>
               <Table.Cell>{patient ? patient.dateOfBirth : ""}</Table.Cell>
             </Table.Row>
+            <Table.Row>
+              <Table.Cell>Entries</Table.Cell>
+            </Table.Row>
+            {Object.values(entries).map((entry) => <EntryComp entry={entry} key={entry.id} />)}
         </Table.Body>
       </Table>
     </div>
